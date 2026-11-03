@@ -1,0 +1,71 @@
+---
+title: "AcessaData — Agricultura de Precisão"
+subtitle: "Etapa 01 | Fundação científica e inventário de fontes"
+author: "Douglas Henrique Silveira Dahmer"
+date: "`r format(Sys.Date(), '%d/%m/%Y')`"
+output:
+  html_document:
+    toc: true
+    number_sections: true
+    toc_depth: 2
+params:
+  raiz_projeto: ".."
+---
+
+```{r configuracao, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = TRUE)
+raiz <- normalizePath(params$raiz_projeto, winslash = "/", mustWork = TRUE)
+source(file.path(raiz, "R", "qualidade_fontes.R"), encoding = "UTF-8")
+resultado <- validar_fontes(file.path(raiz, "metadata", "fontes.csv"))
+```
+
+# Objetivo
+
+Estabelecer a base reprodutível de um estudo em Agricultura de Precisão, sem presumir a disponibilidade de medições agrícolas. O primeiro relatório documenta metodologia, limitações e o estágio do inventário de dados.
+
+# Referência bibliográfica
+
+MOLIN, José Paulo; AMARAL, Lucas Rios do; COLAÇO, André Freitas. *Agricultura de Precisão*. São Paulo: Oficina de Textos, 2015.
+
+# Questão de pesquisa (provisória)
+
+Como caracterizar e representar a variabilidade espacial em uma área agrícola delimitada, usando dados com origem conhecida e métodos estatísticos adequados à densidade e à estrutura amostral?
+
+Esta pergunta será refinada após a escolha da área, cultura, variável-alvo e fontes reais.
+
+# Estado das fontes
+
+```{r status-fontes}
+quadro <- data.frame(
+  Campo = c("Estado", "Fontes cadastradas", "Amostras agrícolas verificadas", "Mapas de produtividade", "Prescrição operacional"),
+  Resultado = c(resultado$status, as.character(resultado$total),
+                "Não disponível", "Não produzido", "Não produzida"),
+  stringsAsFactors = FALSE
+)
+knitr::kable(quadro)
+if (length(resultado$mensagens)) {
+  cat("\nObservações do validador:\n")
+  cat(paste0("- ", resultado$mensagens, collapse = "\n"))
+}
+```
+
+# Protocolo para as próximas etapas
+
+1. Selecionar **uma área de estudo real**, cultura e período observacional.
+2. Registrar instituição de origem, licença, URL, data de acesso e arquivo original.
+3. Conferir manualmente permissões e integridade SHA-256; o cadastro não faz essa conferência sozinho.
+4. Verificar sistemas de referência (CRS), unidades, geometria, ausências e duplicidades.
+5. Escolher análises estatísticas apropriadas aos dados; não pressupor interpolação ou aprendizado de máquina.
+6. Publicar resultados apenas com evidências de teste e revisão técnica.
+
+# Reprodutibilidade
+
+```{r ambiente}
+cat("Versão de R: ", as.character(getRversion()), "\n", sep = "")
+cat("Sistema: ", R.version$platform, "\n", sep = "")
+cat("Data da execução: ", format(Sys.Date(), "%Y-%m-%d"), "\n", sep = "")
+```
+
+# Limitações
+
+Não foram incorporados dados de solo, satélite ou colheita nesta etapa. A geração deste relatório não certifica metodologia agronômica, regularidade espacial nem capacidade de produzir mapas de prescrição.

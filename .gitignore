@@ -1,0 +1,24 @@
+# Dados agrícolas reais e resultados gerados
+/data/raw/*
+!/data/raw/.gitkeep
+/data/processed/*
+!/data/processed/.gitkeep
+/outputs/*
+!/outputs/.gitkeep
+
+# R / RStudio / QGIS
+.Rhistory
+.RData
+.Ruserdata
+.Rproj.user/
+*.Rproj.user/
+__pycache__/
+*.qgz~
+*.qgs~
+*.gpkg-shm
+*.gpkg-wal
+.DS_Store
+Thumbs.db
+
+/_extracao/
+/*.zip
